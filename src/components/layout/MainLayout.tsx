@@ -44,15 +44,19 @@ export default function MainLayout() {
         } bg-blue-900 text-white flex flex-col transition-all duration-300 ease-in-out`}
       >
         {/* Logo */}
-        <div className="flex items-center gap-3 p-4 border-b border-blue-800">
-          <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center flex-shrink-0">
-            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                d="M13 10V3L4 14h7v7l9-11h-7z" />
-            </svg>
-          </div>
-          {sidebarOpen && (
-            <span className="font-bold text-lg tracking-tight">ApolloFlow</span>
+        <div className="flex items-center justify-center border-b border-blue-800 p-3">
+          {sidebarOpen ? (
+            <img
+              src="/apollo_logotipo.png"
+              alt="Apollo Flow"
+              className="h-20 w-auto rounded-lg"
+            />
+          ) : (
+            <img
+              src="/apollo_logotipo.png"
+              alt="Apollo Flow"
+              className="h-9 w-9 rounded-lg object-cover object-top"
+            />
           )}
         </div>
 
@@ -75,6 +79,17 @@ export default function MainLayout() {
             </NavLink>
           ))}
         </nav>
+
+        {/* FTech logo */}
+        {sidebarOpen && (
+          <div className="px-4 py-3 border-t border-blue-800 flex items-center justify-center">
+            <img
+              src="/ftech_logotipo.png"
+              alt="FTech"
+              className="h-10 w-auto rounded-lg opacity-90"
+            />
+          </div>
+        )}
 
         {/* Toggle sidebar */}
         <button
