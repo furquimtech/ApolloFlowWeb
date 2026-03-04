@@ -15,7 +15,7 @@ const navItems = [
   },
   {
     label: 'Usuários',
-    path: '/operador',
+    path: '/usuario',
     icon: (
       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
@@ -111,7 +111,7 @@ export default function MainLayout() {
         {/* Header */}
         <header className="bg-white border-b border-gray-200 px-6 py-3 flex items-center justify-between">
           <h2 className="text-gray-600 text-sm font-medium">
-            Bem-vindo, <span className="text-gray-900 font-semibold">{user?.username}</span>
+            Bem-vindo, <span className="text-gray-900 font-semibold">{user?.nome || user?.username}</span>
           </h2>
           <button
             onClick={handleLogout}

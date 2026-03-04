@@ -17,7 +17,7 @@ const cards = [
   {
     title: 'Usuários',
     description: 'Gerencie os operadores e suas permissões de acesso.',
-    path: '/operador',
+    path: '/usuario',
     color: 'indigo',
     icon: (
       <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -10,6 +10,7 @@ import { autenticarAplicacao, loginUsuario } from '../api/auth';
 interface AuthUser {
   userId: number;
   username: string;
+  nome: string;
 }
 
 interface AuthContextType {
@@ -47,6 +48,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const authUser: AuthUser = {
       userId: userAuth.userId,
       username: userAuth.username,
+      nome: userAuth.nome,
     };
     localStorage.setItem('authUser', JSON.stringify(authUser));
     setUser(authUser);

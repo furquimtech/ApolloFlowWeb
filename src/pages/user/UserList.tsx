@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { operadorApi } from '../../api/operador';
-import type { Operador } from '../../types';
+import { userApi } from '../../api/user';
+import type { User } from '../../types';
 
 function situacaoBadge(situacao: string) {
   const active = situacao?.toLowerCase() === 'ativo';
@@ -16,14 +16,27 @@ function situacaoBadge(situacao: string) {
   );
 }
 
+function tipoBadge(tipo: string) {
+  const isAdmin = tipo?.toUpperCase() === 'ADMINISTRADOR';
+  return (
+    <span
+      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+        isAdmin ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-600'
+      }`}
+    >
+      {tipo}
+    </span>
+  );
+}
+
 function formatDate(dt: string) {
   if (!dt) return '-';
   return new Date(dt).toLocaleDateString('pt-BR');
 }
 
-export default function OperadorList() {
+export default function UserList() {
   const navigate = useNavigate();
-  const [items, setItems] = useState<Operador[]>([]);
+  const [items, setItems] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [deletingId, setDeletingId] = useState<number | null>(null);
@@ -31,7 +44,7 @@ export default function OperadorList() {
   async function load() {
     try {
       setLoading(true);
-      const data = await operadorApi.getAll();
+      const data = await userApi.getAll();
       setItems(data);
     } catch {
       setError('Erro ao carregar usuários.');
@@ -46,8 +59,8 @@ export default function OperadorList() {
     if (!confirm('Confirma a exclusão deste usuário?')) return;
     try {
       setDeletingId(id);
-      await operadorApi.remove(id);
-      setItems((prev) => prev.filter((o) => o.id !== id));
+      await userApi.remove(id);
+      setItems((prev) => prev.filter((u) => u.id !== id));
     } catch {
       alert('Erro ao excluir usuário.');
     } finally {
@@ -64,7 +77,7 @@ export default function OperadorList() {
           <p className="text-gray-500 text-sm mt-1">Gerencie os usuários do sistema</p>
         </div>
         <button
-          onClick={() => navigate('/operador/novo')}
+          onClick={() => navigate('/usuario/novo')}
           className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -104,8 +117,9 @@ export default function OperadorList() {
             <thead className="bg-gray-50 border-b border-gray-200">
               <tr>
                 <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">ID</th>
-                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Código</th>
+                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Username</th>
                 <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Nome</th>
+                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Tipo</th>
                 <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Situação</th>
                 <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Cadastro</th>
                 <th className="text-right px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Ações</th>
@@ -115,14 +129,15 @@ export default function OperadorList() {
               {items.map((item) => (
                 <tr key={item.id} className="hover:bg-gray-50 transition-colors">
                   <td className="px-6 py-4 text-gray-500">{item.id}</td>
-                  <td className="px-6 py-4 font-medium text-gray-800">{item.codigo}</td>
+                  <td className="px-6 py-4 font-medium text-gray-800">{item.username}</td>
                   <td className="px-6 py-4 text-gray-700">{item.nome}</td>
+                  <td className="px-6 py-4">{tipoBadge(item.tipoUsuario)}</td>
                   <td className="px-6 py-4">{situacaoBadge(item.situacao)}</td>
                   <td className="px-6 py-4 text-gray-500">{formatDate(item.dataHoraInclusao)}</td>
                   <td className="px-6 py-4 text-right">
                     <div className="flex items-center justify-end gap-2">
                       <button
-                        onClick={() => navigate(`/operador/${item.id}`)}
+                        onClick={() => navigate(`/usuario/${item.id}`)}
                         className="text-blue-600 hover:text-blue-800 font-medium transition-colors text-xs"
                       >
                         Editar

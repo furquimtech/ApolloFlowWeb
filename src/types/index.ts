@@ -22,6 +22,7 @@ export interface LoginResponse {
   expiracao: string;
   userId: number;
   username: string;
+  nome: string; // adicionado no backend
 }
 
 // Aplicacao
@@ -38,20 +39,25 @@ export interface AplicacaoRequest {
   chave: string;
 }
 
-// Operador (Usuario)
-export interface Operador {
+// User (substitui Operador — tabela Operadores foi removida do backend)
+export interface User {
   id: number;
-  codigo: string;
+  username: string;
   nome: string;
-  chave: string;
+  tipoUsuario: string;
   situacao: string;
   dataHoraInclusao: string;
   dataHoraModificacao: string;
+  pessoaId?: number;
+  assessoriaId?: number;
 }
 
-export interface OperadorRequest {
-  codigo: string;
+export interface UserRequest {
+  username: string;
   nome: string;
-  chave: string;
+  password?: string;
+  tipoUsuario: string;
   situacao: string;
+  assessoriaId?: number;
+  pessoaId?: number;
 }

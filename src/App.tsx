@@ -5,8 +5,8 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import AplicacaoList from './pages/aplicacao/AplicacaoList';
 import AplicacaoForm from './pages/aplicacao/AplicacaoForm';
-import OperadorList from './pages/operador/OperadorList';
-import OperadorForm from './pages/operador/OperadorForm';
+import UserList from './pages/user/UserList';
+import UserForm from './pages/user/UserForm';
 import type { ReactNode } from 'react';
 
 function PrivateRoute({ children }: { children: ReactNode }) {
@@ -46,9 +46,9 @@ function AppRoutes() {
         <Route path="/aplicacao" element={<AplicacaoList />} />
         <Route path="/aplicacao/novo" element={<AplicacaoForm />} />
         <Route path="/aplicacao/:id" element={<AplicacaoForm />} />
-        <Route path="/operador" element={<OperadorList />} />
-        <Route path="/operador/novo" element={<OperadorForm />} />
-        <Route path="/operador/:id" element={<OperadorForm />} />
+        <Route path="/usuario" element={<UserList />} />
+        <Route path="/usuario/novo" element={<UserForm />} />
+        <Route path="/usuario/:id" element={<UserForm />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

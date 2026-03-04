@@ -1,16 +1,22 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { operadorApi } from '../../api/operador';
-import type { OperadorRequest } from '../../types';
+import { userApi } from '../../api/user';
+import type { UserRequest } from '../../types';
 
-const EMPTY: OperadorRequest = { codigo: '', nome: '', chave: '', situacao: 'Ativo' };
+const EMPTY: UserRequest = {
+  username: '',
+  nome: '',
+  password: '',
+  tipoUsuario: 'OPERADOR',
+  situacao: 'Ativo',
+};
 
-export default function OperadorForm() {
+export default function UserForm() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const isEdit = !!id && id !== 'novo';
 
-  const [form, setForm] = useState<OperadorRequest>(EMPTY);
+  const [form, setForm] = useState<UserRequest>(EMPTY);
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
@@ -18,13 +24,14 @@ export default function OperadorForm() {
   useEffect(() => {
     if (!isEdit) return;
     setLoading(true);
-    operadorApi
+    userApi
       .getById(Number(id))
       .then((data) =>
         setForm({
-          codigo: data.codigo,
+          username: data.username,
           nome: data.nome,
-          chave: '',
+          password: '',
+          tipoUsuario: data.tipoUsuario,
           situacao: data.situacao,
         })
       )
@@ -43,12 +50,17 @@ export default function OperadorForm() {
     setError('');
     setSaving(true);
     try {
+      const payload: UserRequest = {
+        ...form,
+        // Em edição, só envia password se preenchido
+        password: form.password || undefined,
+      };
       if (isEdit) {
-        await operadorApi.update(Number(id), form);
+        await userApi.update(Number(id), payload);
       } else {
-        await operadorApi.create(form);
+        await userApi.create(payload);
       }
-      navigate('/operador');
+      navigate('/usuario');
     } catch (err: unknown) {
       const msg =
         (err as { response?: { data?: { mensagem?: string } } })?.response?.data?.mensagem ??
@@ -76,7 +88,7 @@ export default function OperadorForm() {
       {/* Header */}
       <div className="flex items-center gap-3 mb-6">
         <button
-          onClick={() => navigate('/operador')}
+          onClick={() => navigate('/usuario')}
           className="text-gray-400 hover:text-gray-600 transition-colors"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -105,15 +117,15 @@ export default function OperadorForm() {
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Código <span className="text-red-500">*</span>
+              Username <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
-              name="codigo"
-              value={form.codigo}
+              name="username"
+              value={form.username}
               onChange={handleChange}
               required
-              placeholder="Ex: admin"
+              placeholder="Ex: joao.silva"
               className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-800 placeholder-gray-400"
             />
           </div>
@@ -139,11 +151,11 @@ export default function OperadorForm() {
             </label>
             <input
               type="password"
-              name="chave"
-              value={form.chave}
+              name="password"
+              value={form.password}
               onChange={handleChange}
               required={!isEdit}
-              placeholder={isEdit ? 'Deixe em branco para não alterar' : 'Senha do usuário'}
+              placeholder={isEdit ? 'Deixe em branco para não alterar' : 'Senha de acesso'}
               className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-800 placeholder-gray-400"
             />
             {isEdit && (
@@ -151,6 +163,21 @@ export default function OperadorForm() {
                 Deixe em branco para manter a senha atual.
               </p>
             )}
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Tipo de Usuário
+            </label>
+            <select
+              name="tipoUsuario"
+              value={form.tipoUsuario}
+              onChange={handleChange}
+              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-800 bg-white"
+            >
+              <option value="OPERADOR">Operador</option>
+              <option value="ADMINISTRADOR">Administrador</option>
+            </select>
           </div>
 
           <div>
@@ -188,7 +215,7 @@ export default function OperadorForm() {
             </button>
             <button
               type="button"
-              onClick={() => navigate('/operador')}
+              onClick={() => navigate('/usuario')}
               className="px-6 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-2.5 rounded-lg transition-colors"
             >
               Cancelar
