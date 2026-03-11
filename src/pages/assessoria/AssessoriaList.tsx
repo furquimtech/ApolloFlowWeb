@@ -44,7 +44,7 @@ export default function AssessoriaList() {
         <h1 className="text-2xl font-bold text-gray-900">Assessorias</h1>
         <button
           onClick={() => navigate('/assessoria/novo')}
-          className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
+          className="bg-ftech-600 hover:bg-ftech-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
         >
           Nova Assessoria
         </button>
@@ -59,7 +59,7 @@ export default function AssessoriaList() {
       {loading ? (
         <div className="flex items-center justify-center py-16">
           <svg
-            className="animate-spin h-8 w-8 text-blue-600"
+            className="animate-spin h-8 w-8 text-ftech-600"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
@@ -112,7 +112,7 @@ export default function AssessoriaList() {
                     <div className="flex items-center justify-center gap-2">
                       <button
                         onClick={() => navigate(`/assessoria/${item.id}`)}
-                        className="text-blue-600 hover:text-blue-800 text-xs font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors"
+                        className="text-ftech-600 hover:text-ftech-800 text-xs font-medium px-2 py-1 rounded hover:bg-ftech-50 transition-colors"
                       >
                         Editar
                       </button>

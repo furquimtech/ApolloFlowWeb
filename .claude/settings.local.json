@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(xargs sed -i -e 's/blue-900/ftech-900/g' -e 's/blue-800/ftech-800/g' -e 's/blue-700/ftech-700/g' -e 's/blue-600/ftech-600/g' -e 's/blue-500/ftech-500/g' -e 's/blue-400/ftech-400/g' -e 's/blue-300/ftech-300/g' -e 's/blue-200/ftech-200/g' -e 's/blue-100/ftech-100/g' -e 's/blue-50/ftech-50/g')",
+      "Bash(npx tsc --noEmit)"
+    ]
+  }
+}

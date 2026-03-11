@@ -21,7 +21,7 @@ function tipoBadge(tipo: string) {
   return (
     <span
       className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-        isAdmin ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-600'
+        isAdmin ? 'bg-ftech-100 text-ftech-800' : 'bg-gray-100 text-gray-600'
       }`}
     >
       {tipo}
@@ -78,7 +78,7 @@ export default function UserList() {
         </div>
         <button
           onClick={() => navigate('/usuario/novo')}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors"
+          className="bg-ftech-600 hover:bg-ftech-700 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -138,7 +138,7 @@ export default function UserList() {
                     <div className="flex items-center justify-end gap-2">
                       <button
                         onClick={() => navigate(`/usuario/${item.id}`)}
-                        className="text-blue-600 hover:text-blue-800 font-medium transition-colors text-xs"
+                        className="text-ftech-600 hover:text-ftech-800 font-medium transition-colors text-xs"
                       >
                         Editar
                       </button>

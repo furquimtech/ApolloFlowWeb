@@ -1,1 +1,17 @@
 @import "tailwindcss";
+
+@theme {
+  /* FTech Navy — estrutura/sidebar (escuro → médio) */
+  --color-ftech-900: #1B2F4E;
+  --color-ftech-800: #243d66;
+  --color-ftech-700: #2e5080;
+
+  /* FTech Teal — interativo/CTAs (vibrante → claro) */
+  --color-ftech-600: #2ABFAA;
+  --color-ftech-500: #3acfba;
+  --color-ftech-400: #5ddece;
+  --color-ftech-300: #8ae9df;
+  --color-ftech-200: #b0ece6;
+  --color-ftech-100: #d5f5f1;
+  --color-ftech-50:  #eafbf9;
+}

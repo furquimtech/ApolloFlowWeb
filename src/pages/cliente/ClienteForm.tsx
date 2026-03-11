@@ -48,7 +48,7 @@ function Input(props: React.InputHTMLAttributes<HTMLInputElement>) {
   return (
     <input
       {...props}
-      className={`w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${props.className ?? ''}`}
+      className={`w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ftech-500 ${props.className ?? ''}`}
     />
   );
 }
@@ -57,7 +57,7 @@ function Select(props: React.SelectHTMLAttributes<HTMLSelectElement>) {
   return (
     <select
       {...props}
-      className={`w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white ${props.className ?? ''}`}
+      className={`w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ftech-500 bg-white ${props.className ?? ''}`}
     />
   );
 }
@@ -76,14 +76,17 @@ export default function ClienteForm() {
   // Estado do mini-formulário de novo telefone
   const [newTel, setNewTel] = useState({ ddd: '', numero: '', tipo: 'Celular', principal: false });
   const [showTelForm, setShowTelForm] = useState(false);
+  const [editingTelIndex, setEditingTelIndex] = useState<number | null>(null);
 
   // Estado do mini-formulário de novo endereço
   const [newEnd, setNewEnd] = useState({ cep: '', logradouro: '', numero: '', complemento: '', bairro: '', cidade: '', uf: 'SP', tipo: 'Residencial', tipoLogradouro: '', principal: false });
   const [showEndForm, setShowEndForm] = useState(false);
+  const [editingEndIndex, setEditingEndIndex] = useState<number | null>(null);
 
   // Estado do mini-formulário de novo e-mail
   const [newEmail, setNewEmail] = useState({ emailAddress: '', principal: false });
   const [showEmailForm, setShowEmailForm] = useState(false);
+  const [editingEmailIndex, setEditingEmailIndex] = useState<number | null>(null);
 
   useEffect(() => {
     if (!isEdit) return;
@@ -106,14 +109,37 @@ export default function ClienteForm() {
   }
 
   // ─── Telefones ───────────────────────────────────────────
-  function addTelefone() {
+  function saveTelefone() {
     if (!newTel.numero) return;
-    setForm(prev => ({
-      ...prev,
-      telefones: [...(prev.telefones ?? []), { ...newTel, ramal: '' }],
-    }));
+    if (editingTelIndex !== null) {
+      setForm(prev => ({
+        ...prev,
+        telefones: (prev.telefones ?? []).map((tel, i) =>
+          i === editingTelIndex ? { ...tel, ...newTel } : tel
+        ),
+      }));
+    } else {
+      setForm(prev => ({
+        ...prev,
+        telefones: [...(prev.telefones ?? []), { ...newTel, ramal: '' }],
+      }));
+    }
     setNewTel(EMPTY_TEL);
+    setEditingTelIndex(null);
     setShowTelForm(false);
+  }
+
+  function editTelefone(index: number) {
+    const tel = form.telefones?.[index];
+    if (!tel) return;
+    setNewTel({
+      ddd: tel.ddd ?? '',
+      numero: tel.numero ?? '',
+      tipo: tel.tipo ?? 'Celular',
+      principal: Boolean(tel.principal),
+    });
+    setEditingTelIndex(index);
+    setShowTelForm(true);
   }
 
   function removeTelefone(index: number) {
@@ -124,14 +150,43 @@ export default function ClienteForm() {
   }
 
   // ─── Endereços ────────────────────────────────────────────
-  function addEndereco() {
+  function saveEndereco() {
     if (!newEnd.cep || !newEnd.logradouro || !newEnd.numero || !newEnd.bairro || !newEnd.cidade || !newEnd.uf) return;
-    setForm(prev => ({
-      ...prev,
-      enderecos: [...(prev.enderecos ?? []), { ...newEnd }],
-    }));
+    if (editingEndIndex !== null) {
+      setForm(prev => ({
+        ...prev,
+        enderecos: (prev.enderecos ?? []).map((end, i) =>
+          i === editingEndIndex ? { ...end, ...newEnd } : end
+        ),
+      }));
+    } else {
+      setForm(prev => ({
+        ...prev,
+        enderecos: [...(prev.enderecos ?? []), { ...newEnd }],
+      }));
+    }
     setNewEnd(EMPTY_END);
+    setEditingEndIndex(null);
     setShowEndForm(false);
+  }
+
+  function editEndereco(index: number) {
+    const end = form.enderecos?.[index];
+    if (!end) return;
+    setNewEnd({
+      cep: end.cep ?? '',
+      logradouro: end.logradouro ?? '',
+      numero: end.numero ?? '',
+      complemento: end.complemento ?? '',
+      bairro: end.bairro ?? '',
+      cidade: end.cidade ?? '',
+      uf: end.uf ?? 'SP',
+      tipo: end.tipo ?? 'Residencial',
+      tipoLogradouro: end.tipoLogradouro ?? '',
+      principal: Boolean(end.principal),
+    });
+    setEditingEndIndex(index);
+    setShowEndForm(true);
   }
 
   function removeEndereco(index: number) {
@@ -142,14 +197,35 @@ export default function ClienteForm() {
   }
 
   // ─── E-mails ──────────────────────────────────────────────
-  function addEmail() {
+  function saveEmail() {
     if (!newEmail.emailAddress) return;
-    setForm(prev => ({
-      ...prev,
-      emails: [...(prev.emails ?? []), { ...newEmail }],
-    }));
+    if (editingEmailIndex !== null) {
+      setForm(prev => ({
+        ...prev,
+        emails: (prev.emails ?? []).map((email, i) =>
+          i === editingEmailIndex ? { ...email, ...newEmail } : email
+        ),
+      }));
+    } else {
+      setForm(prev => ({
+        ...prev,
+        emails: [...(prev.emails ?? []), { ...newEmail }],
+      }));
+    }
     setNewEmail(EMPTY_EMAIL);
+    setEditingEmailIndex(null);
     setShowEmailForm(false);
+  }
+
+  function editEmail(index: number) {
+    const email = form.emails?.[index];
+    if (!email) return;
+    setNewEmail({
+      emailAddress: email.emailAddress ?? '',
+      principal: Boolean(email.principal),
+    });
+    setEditingEmailIndex(index);
+    setShowEmailForm(true);
   }
 
   function removeEmail(index: number) {
@@ -211,7 +287,7 @@ export default function ClienteForm() {
         <button
           type="submit"
           disabled={saving}
-          className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-medium px-5 py-2 rounded-lg transition-colors"
+          className="inline-flex items-center gap-2 bg-ftech-600 hover:bg-ftech-700 disabled:opacity-50 text-white font-medium px-5 py-2 rounded-lg transition-colors"
         >
           {saving ? (
             <>
@@ -249,7 +325,7 @@ export default function ClienteForm() {
               onClick={() => setActiveTab(tab.key)}
               className={`px-4 py-2.5 text-sm font-medium border-b-2 transition-colors -mb-px ${
                 activeTab === tab.key
-                  ? 'border-blue-600 text-blue-600'
+                  ? 'border-ftech-600 text-ftech-600'
                   : 'border-transparent text-gray-500 hover:text-gray-700'
               }`}
             >
@@ -393,18 +469,27 @@ export default function ClienteForm() {
                     </span>
                     <span className="text-xs text-gray-500">{tel.tipo}</span>
                     {tel.principal && (
-                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-ftech-100 text-ftech-800">
                         Principal
                       </span>
                     )}
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => removeTelefone(i)}
-                    className="text-red-500 hover:text-red-700 text-xs font-medium px-2 py-1 rounded hover:bg-red-50 transition-colors"
-                  >
-                    Remover
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => editTelefone(i)}
+                      className="text-ftech-600 hover:text-ftech-800 text-xs font-medium px-2 py-1 rounded hover:bg-ftech-50 transition-colors"
+                    >
+                      Editar
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => removeTelefone(i)}
+                      className="text-red-500 hover:text-red-700 text-xs font-medium px-2 py-1 rounded hover:bg-red-50 transition-colors"
+                    >
+                      Remover
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
@@ -413,7 +498,9 @@ export default function ClienteForm() {
           {/* Mini-formulário de novo telefone */}
           {showTelForm ? (
             <div className="border border-gray-200 rounded-lg p-4 bg-gray-50 space-y-3">
-              <h3 className="text-sm font-medium text-gray-700">Novo Telefone</h3>
+              <h3 className="text-sm font-medium text-gray-700">
+                {editingTelIndex !== null ? 'Editar Telefone' : 'Novo Telefone'}
+              </h3>
               <div className="flex flex-wrap gap-3 items-end">
                 <div>
                   <FieldLabel>DDD</FieldLabel>
@@ -451,7 +538,7 @@ export default function ClienteForm() {
                     id="tel-principal"
                     checked={newTel.principal}
                     onChange={e => setNewTel(prev => ({ ...prev, principal: e.target.checked }))}
-                    className="w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+                    className="w-4 h-4 text-ftech-600 rounded border-gray-300 focus:ring-ftech-500"
                   />
                   <label htmlFor="tel-principal" className="text-sm text-gray-700">Principal</label>
                 </div>
@@ -459,14 +546,18 @@ export default function ClienteForm() {
               <div className="flex gap-2">
                 <button
                   type="button"
-                  onClick={addTelefone}
-                  className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
+                  onClick={saveTelefone}
+                  className="bg-ftech-600 hover:bg-ftech-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
                 >
-                  Adicionar
+                  {editingTelIndex !== null ? 'Salvar alterações' : 'Adicionar'}
                 </button>
                 <button
                   type="button"
-                  onClick={() => { setShowTelForm(false); setNewTel(EMPTY_TEL); }}
+                  onClick={() => {
+                    setShowTelForm(false);
+                    setNewTel(EMPTY_TEL);
+                    setEditingTelIndex(null);
+                  }}
                   className="text-gray-600 hover:text-gray-800 text-sm font-medium px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-100 transition-colors"
                 >
                   Cancelar
@@ -477,7 +568,7 @@ export default function ClienteForm() {
             <button
               type="button"
               onClick={() => setShowTelForm(true)}
-              className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 text-sm font-medium px-3 py-2 rounded-lg hover:bg-blue-50 transition-colors"
+              className="inline-flex items-center gap-2 text-ftech-600 hover:text-ftech-800 text-sm font-medium px-3 py-2 rounded-lg hover:bg-ftech-50 transition-colors"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -511,18 +602,27 @@ export default function ClienteForm() {
                       {end.tipo ? ` &bull; ${end.tipo}` : ''}
                     </span>
                     {end.principal && (
-                      <span className="inline-flex items-center self-start px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                      <span className="inline-flex items-center self-start px-2 py-0.5 rounded-full text-xs font-medium bg-ftech-100 text-ftech-800">
                         Principal
                       </span>
                     )}
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => removeEndereco(i)}
-                    className="text-red-500 hover:text-red-700 text-xs font-medium px-2 py-1 rounded hover:bg-red-50 transition-colors"
-                  >
-                    Remover
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => editEndereco(i)}
+                      className="text-ftech-600 hover:text-ftech-800 text-xs font-medium px-2 py-1 rounded hover:bg-ftech-50 transition-colors"
+                    >
+                      Editar
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => removeEndereco(i)}
+                      className="text-red-500 hover:text-red-700 text-xs font-medium px-2 py-1 rounded hover:bg-red-50 transition-colors"
+                    >
+                      Remover
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
@@ -531,7 +631,9 @@ export default function ClienteForm() {
           {/* Mini-formulário de novo endereço */}
           {showEndForm ? (
             <div className="border border-gray-200 rounded-lg p-4 bg-gray-50 space-y-3">
-              <h3 className="text-sm font-medium text-gray-700">Novo Endereço</h3>
+              <h3 className="text-sm font-medium text-gray-700">
+                {editingEndIndex !== null ? 'Editar Endereço' : 'Novo Endereço'}
+              </h3>
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <FieldLabel required>CEP</FieldLabel>
@@ -610,7 +712,7 @@ export default function ClienteForm() {
                     id="end-principal"
                     checked={newEnd.principal}
                     onChange={e => setNewEnd(prev => ({ ...prev, principal: e.target.checked }))}
-                    className="w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+                    className="w-4 h-4 text-ftech-600 rounded border-gray-300 focus:ring-ftech-500"
                   />
                   <label htmlFor="end-principal" className="text-sm text-gray-700">Principal</label>
                 </div>
@@ -618,14 +720,18 @@ export default function ClienteForm() {
               <div className="flex gap-2">
                 <button
                   type="button"
-                  onClick={addEndereco}
-                  className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
+                  onClick={saveEndereco}
+                  className="bg-ftech-600 hover:bg-ftech-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
                 >
-                  Adicionar
+                  {editingEndIndex !== null ? 'Salvar alterações' : 'Adicionar'}
                 </button>
                 <button
                   type="button"
-                  onClick={() => { setShowEndForm(false); setNewEnd(EMPTY_END); }}
+                  onClick={() => {
+                    setShowEndForm(false);
+                    setNewEnd(EMPTY_END);
+                    setEditingEndIndex(null);
+                  }}
                   className="text-gray-600 hover:text-gray-800 text-sm font-medium px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-100 transition-colors"
                 >
                   Cancelar
@@ -636,7 +742,7 @@ export default function ClienteForm() {
             <button
               type="button"
               onClick={() => setShowEndForm(true)}
-              className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 text-sm font-medium px-3 py-2 rounded-lg hover:bg-blue-50 transition-colors"
+              className="inline-flex items-center gap-2 text-ftech-600 hover:text-ftech-800 text-sm font-medium px-3 py-2 rounded-lg hover:bg-ftech-50 transition-colors"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -664,18 +770,27 @@ export default function ClienteForm() {
                   <div className="flex items-center gap-4">
                     <span className="font-medium text-gray-900 text-sm">{em.emailAddress}</span>
                     {em.principal && (
-                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-ftech-100 text-ftech-800">
                         Principal
                       </span>
                     )}
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => removeEmail(i)}
-                    className="text-red-500 hover:text-red-700 text-xs font-medium px-2 py-1 rounded hover:bg-red-50 transition-colors"
-                  >
-                    Remover
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => editEmail(i)}
+                      className="text-ftech-600 hover:text-ftech-800 text-xs font-medium px-2 py-1 rounded hover:bg-ftech-50 transition-colors"
+                    >
+                      Editar
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => removeEmail(i)}
+                      className="text-red-500 hover:text-red-700 text-xs font-medium px-2 py-1 rounded hover:bg-red-50 transition-colors"
+                    >
+                      Remover
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
@@ -684,7 +799,9 @@ export default function ClienteForm() {
           {/* Mini-formulário de novo e-mail */}
           {showEmailForm ? (
             <div className="border border-gray-200 rounded-lg p-4 bg-gray-50 space-y-3">
-              <h3 className="text-sm font-medium text-gray-700">Novo E-mail</h3>
+              <h3 className="text-sm font-medium text-gray-700">
+                {editingEmailIndex !== null ? 'Editar E-mail' : 'Novo E-mail'}
+              </h3>
               <div className="flex flex-wrap gap-3 items-end">
                 <div className="flex-1 min-w-64">
                   <FieldLabel required>E-mail</FieldLabel>
@@ -701,7 +818,7 @@ export default function ClienteForm() {
                     id="email-principal"
                     checked={newEmail.principal}
                     onChange={e => setNewEmail(prev => ({ ...prev, principal: e.target.checked }))}
-                    className="w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+                    className="w-4 h-4 text-ftech-600 rounded border-gray-300 focus:ring-ftech-500"
                   />
                   <label htmlFor="email-principal" className="text-sm text-gray-700">Principal</label>
                 </div>
@@ -709,14 +826,18 @@ export default function ClienteForm() {
               <div className="flex gap-2">
                 <button
                   type="button"
-                  onClick={addEmail}
-                  className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
+                  onClick={saveEmail}
+                  className="bg-ftech-600 hover:bg-ftech-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
                 >
-                  Adicionar
+                  {editingEmailIndex !== null ? 'Salvar alterações' : 'Adicionar'}
                 </button>
                 <button
                   type="button"
-                  onClick={() => { setShowEmailForm(false); setNewEmail(EMPTY_EMAIL); }}
+                  onClick={() => {
+                    setShowEmailForm(false);
+                    setNewEmail(EMPTY_EMAIL);
+                    setEditingEmailIndex(null);
+                  }}
                   className="text-gray-600 hover:text-gray-800 text-sm font-medium px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-100 transition-colors"
                 >
                   Cancelar
@@ -727,7 +848,7 @@ export default function ClienteForm() {
             <button
               type="button"
               onClick={() => setShowEmailForm(true)}
-              className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 text-sm font-medium px-3 py-2 rounded-lg hover:bg-blue-50 transition-colors"
+              className="inline-flex items-center gap-2 text-ftech-600 hover:text-ftech-800 text-sm font-medium px-3 py-2 rounded-lg hover:bg-ftech-50 transition-colors"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />

@@ -29,7 +29,7 @@ const cards = [
 ];
 
 const colorMap: Record<string, string> = {
-  blue: 'bg-blue-50 text-blue-600 group-hover:bg-blue-100',
+  blue: 'bg-ftech-50 text-ftech-600 group-hover:bg-ftech-100',
   indigo: 'bg-indigo-50 text-indigo-600 group-hover:bg-indigo-100',
 };
 
@@ -51,14 +51,14 @@ export default function Dashboard() {
           <button
             key={card.path}
             onClick={() => navigate(card.path)}
-            className="group bg-white rounded-xl border border-gray-200 p-6 text-left hover:shadow-md transition-all duration-200 hover:border-blue-200"
+            className="group bg-white rounded-xl border border-gray-200 p-6 text-left hover:shadow-md transition-all duration-200 hover:border-ftech-200"
           >
             <div className={`inline-flex p-3 rounded-xl mb-4 transition-colors ${colorMap[card.color]}`}>
               {card.icon}
             </div>
             <h3 className="font-semibold text-gray-800 mb-1">{card.title}</h3>
             <p className="text-sm text-gray-500">{card.description}</p>
-            <div className="flex items-center gap-1 mt-4 text-blue-600 text-sm font-medium">
+            <div className="flex items-center gap-1 mt-4 text-ftech-600 text-sm font-medium">
               Acessar
               <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />

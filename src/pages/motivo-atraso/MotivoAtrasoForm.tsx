@@ -5,6 +5,7 @@ import type { MotivoAtrasoRequest } from '../../types';
 
 const EMPTY: MotivoAtrasoRequest = {
   descricao: '',
+  idCobransaas: '',
 };
 
 export default function MotivoAtrasoForm() {
@@ -24,6 +25,7 @@ export default function MotivoAtrasoForm() {
       .then(data =>
         setForm({
           descricao: data.descricao,
+          idCobransaas: data.idCobransaas ?? '',
         })
       )
       .catch(() => setError('Erro ao carregar motivo de atraso.'))
@@ -80,7 +82,7 @@ export default function MotivoAtrasoForm() {
       {loading ? (
         <div className="flex items-center justify-center py-16">
           <svg
-            className="animate-spin h-8 w-8 text-blue-600"
+            className="animate-spin h-8 w-8 text-ftech-600"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
@@ -101,7 +103,22 @@ export default function MotivoAtrasoForm() {
               value={form.descricao}
               onChange={handleChange}
               required
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ftech-500 focus:border-transparent"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              ID Cobransaas
+              <span className="ml-1 text-xs font-normal text-gray-400">(de-para para lançamento de tarefas)</span>
+            </label>
+            <input
+              type="text"
+              name="idCobransaas"
+              value={form.idCobransaas ?? ''}
+              onChange={handleChange}
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ftech-500 focus:border-transparent"
+              placeholder="ID no Cobransaas (opcional)"
             />
           </div>
 
@@ -109,7 +126,7 @@ export default function MotivoAtrasoForm() {
             <button
               type="submit"
               disabled={saving}
-              className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-sm font-medium px-5 py-2 rounded-lg transition-colors flex items-center gap-2"
+              className="bg-ftech-600 hover:bg-ftech-700 disabled:opacity-50 text-white text-sm font-medium px-5 py-2 rounded-lg transition-colors flex items-center gap-2"
             >
               {saving && (
                 <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">

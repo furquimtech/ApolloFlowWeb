@@ -28,15 +28,23 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-blue-900 to-blue-700 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-linear-to-br from-ftech-900 to-ftech-700 flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8">
         {/* Logo / Header */}
         <div className="text-center mb-8">
           <img
             src="/apollo_logotipo.png"
             alt="Apollo Flow"
-            className="mx-auto h-32 w-auto mb-4 rounded-xl"
+            className="mx-auto h-28 w-auto mb-5 rounded-xl"
           />
+          <div className="flex items-center justify-center gap-2 mb-3">
+            <span className="text-xs text-gray-400">Powered by</span>
+            <img
+              src="/ftech_logotipo.png"
+              alt="FTech"
+              className="h-6 w-auto"
+            />
+          </div>
           <p className="text-gray-500 text-sm">Entre com suas credenciais</p>
         </div>
 
@@ -59,7 +67,7 @@ export default function Login() {
               required
               autoComplete="username"
               placeholder="Digite seu usuário"
-              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-800 placeholder-gray-400"
+              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-ftech-500 focus:border-transparent text-gray-800 placeholder-gray-400"
             />
           </div>
 
@@ -74,14 +82,14 @@ export default function Login() {
               required
               autoComplete="current-password"
               placeholder="Digite sua senha"
-              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-800 placeholder-gray-400"
+              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-ftech-500 focus:border-transparent text-gray-800 placeholder-gray-400"
             />
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold py-2.5 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2"
+            className="w-full bg-ftech-600 hover:bg-ftech-700 disabled:bg-ftech-400 text-white font-semibold py-2.5 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2"
           >
             {loading ? (
               <>

@@ -44,7 +44,7 @@ export default function ContratoList() {
 
   function badgeClass(situacao: string) {
     if (situacao === 'Ativo') return 'bg-green-100 text-green-800';
-    if (situacao === 'Liquidado') return 'bg-blue-100 text-blue-800';
+    if (situacao === 'Liquidado') return 'bg-ftech-100 text-ftech-800';
     if (situacao === 'Cancelado') return 'bg-red-100 text-red-800';
     return 'bg-gray-100 text-gray-600';
   }
@@ -59,7 +59,7 @@ export default function ContratoList() {
         </div>
         <button
           onClick={() => navigate('/contrato/novo')}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors"
+          className="bg-ftech-600 hover:bg-ftech-700 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -130,7 +130,7 @@ export default function ContratoList() {
                       <div className="flex items-center justify-end gap-2">
                         <button
                           onClick={() => navigate(`/contrato/${item.id}`)}
-                          className="text-blue-600 hover:text-blue-800 font-medium transition-colors text-xs"
+                          className="text-ftech-600 hover:text-ftech-800 font-medium transition-colors text-xs"
                         >
                           Editar
                         </button>

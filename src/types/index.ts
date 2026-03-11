@@ -20,11 +20,14 @@ export interface User {
   tipoUsuario: string; situacao: string;
   dataHoraInclusao: string; dataHoraModificacao: string;
   pessoaId?: number; assessoriaId?: number;
+  carteiras?: Carteira[];
+  carteiraIds?: number[];
 }
 export interface UserRequest {
   username: string; nome: string; password?: string;
   tipoUsuario: string; situacao: string;
   assessoriaId?: number; pessoaId?: number;
+  carteiraIds?: number[];
 }
 
 // ── Assessoria ────────────────────────────────────────────────────────────────
@@ -44,6 +47,7 @@ export interface Carteira {
 }
 export interface CarteiraRequest {
   id?: number; nome: string; descricao?: string; situacao: string; assessoriaId: number;
+  regraCalculo?: RegraCalculoRequest;
 }
 
 // ── RegraCalculo ──────────────────────────────────────────────────────────────
@@ -64,17 +68,89 @@ export interface RegraParcelamento {
   regraCalculoId: number;
 }
 
+export interface RegraCalculoRequest {
+  carteiraId?: number;
+  nome: string;
+  taxaCp: number;
+  tipoJuros: number;
+  taxaJurosMes: number;
+  taxaMulta: number;
+  taxaHonorarios: number;
+  taxaComissionamento: number;
+  ativo: boolean;
+  regrasParcelamento?: RegraParcelamentoRequest[];
+}
+
+export interface RegraParcelamentoRequest {
+  id?: number;
+  maxParcelas: number;
+  valorMinimoParcela: number;
+  taxaJurosParcelamento: number;
+  percentualEntrada: number;
+}
+
 // ── Produto ───────────────────────────────────────────────────────────────────
 export interface Produto { id: number; nome: string; descricao: string; }
 export interface ProdutoRequest { nome: string; descricao: string; }
 
 // ── MotivoContato ─────────────────────────────────────────────────────────────
-export interface MotivoContato { id: number; descricao: string; }
-export interface MotivoContatoRequest { descricao: string; }
+export interface MotivoContato {
+  id: number;
+  codigo: string;
+  descricao: string;
+  produtivo: boolean;
+  cpc: boolean;
+  diasStandBy: number;
+  ativo: boolean;
+  historicoPadrao: string;
+  codigoExterno: string;
+  descricaoExterno: string;
+  /** "NOVO" = cria nova tarefa e encerra atendimento; "MANTER" = mantém cliente aberto */
+  acao: string;
+}
+export interface MotivoContatoRequest {
+  codigo: string;
+  descricao: string;
+  produtivo: boolean;
+  cpc: boolean;
+  diasStandBy: number;
+  ativo: boolean;
+  historicoPadrao: string;
+  codigoExterno: string;
+  descricaoExterno: string;
+}
 
 // ── MotivoAtraso ──────────────────────────────────────────────────────────────
-export interface MotivoAtraso { id: number; descricao: string; }
-export interface MotivoAtrasoRequest { descricao: string; }
+export interface MotivoAtraso {
+  id: number; descricao: string;
+  carteiraId?: number; carteira?: Carteira;
+  /** ID equivalente no Cobransaas (de-para para lançamento de Tarefas). */
+  idCobransaas?: string;
+}
+export interface MotivoAtrasoRequest {
+  descricao: string;
+  carteiraId?: number;
+  idCobransaas?: string;
+}
+
+// ── CarteiraCobransaas ────────────────────────────────────────────────────────
+export interface CarteiraCobransaas {
+  id: number; carteiraId: number; carteira?: Carteira;
+  host: string; apiKey: string; assessoriaExternaId?: string;
+  ativo: boolean; tamanhoPagina: number;
+  modoSincronizacao: string; seletoresCliente: string;
+  observacao?: string;
+  dataUltimaSincronizacao?: string;
+  ultimoCursor?: string; ultimaPagina?: number;
+  ultimoLoteId?: string; ultimoLoteDataProcessamento?: string;
+  dataHoraInclusao: string; dataHoraModificacao: string;
+}
+export interface CarteiraCobransaasRequest {
+  carteiraId: number; host: string; apiKey: string;
+  assessoriaExternaId?: string; ativo: boolean;
+  tamanhoPagina: number; modoSincronizacao: string;
+  seletoresCliente: string; observacao?: string;
+}
 
 // ── Cliente / Pessoa (com contatos embutidos) ─────────────────────────────────
 export interface ClienteEmail {
@@ -124,6 +200,7 @@ export interface Contrato {
   lp: boolean; dataLp?: string; siglaAtraso?: string; rating?: string;
   carteiraId: number; carteira?: Carteira;
   clienteId: number; cliente?: Cliente;
+  parcelas?: Parcela[];
   produto?: Produto;
   dataHoraCriacao: string; dataHoraModificacao: string;
 }
@@ -138,6 +215,7 @@ export interface ContratoRequest {
   diasAtraso?: number; dataVencimento?: string;
   lp: boolean; siglaAtraso?: string; rating?: string;
   carteiraId: number; clienteId: number;
+  parcelas?: ParcelaRequest[];
 }
 
 // ── Parcela ───────────────────────────────────────────────────────────────────
@@ -152,6 +230,61 @@ export interface Parcela {
   valorPrincipalAberto: number;
   situacao: string; acordo: boolean; bloqueio: boolean; promessa: boolean;
   contratoId: number;
+}
+export interface ParcelaRequest {
+  id?: number;
+  idExterno?: string;
+  numeroContrato: string;
+  numeroParcela: number;
+  dataVencimento: string;
+  saldoPrincipal: number;
+  saldoTotal: number;
+  saldoAtual: number;
+  saldoContabil: number;
+  valorPrincipal: number;
+  valorTotal: number;
+  valorMulta: number;
+  valorPermanencia: number;
+  valorMora: number;
+  valorOutros: number;
+  valorDesconto: number;
+  valorDespesa?: number;
+  valorBoleto?: number;
+  valorBaseTributo?: number;
+  valorPrincipalAberto: number;
+  situacao: string;
+  acordo: boolean;
+  bloqueio: boolean;
+  promessa: boolean;
+  contratoId?: number;
+}
+
+// ── Fila ──────────────────────────────────────────────────────────────────────
+export interface Fila {
+  id: number; codigoFila: string; descricao: string; ativo: boolean;
+  dataInicio: string; dataFim?: string;
+  /** "INTERNO" ou "DISCADOR" */
+  tipo: string;
+  dataHoraInclusao: string; dataHoraModificacao: string;
+}
+export interface FilaRequest {
+  codigoFila: string; descricao: string; ativo: boolean;
+  dataInicio: string; dataFim?: string; tipo: string;
+}
+export interface FilaRegistro {
+  id: number; filaId: number;
+  clienteId: number; cliente?: Pick<Cliente, 'id' | 'nome' | 'cpfCnpj'>;
+  contratoId?: number; contrato?: Pick<Contrato, 'id' | 'numeroContrato'>;
+  dataHoraAgendamento?: string; dataHoraAtendimento?: string;
+  atendido: boolean; ocorrenciaId?: number;
+}
+export interface FilaFiltroRequest {
+  carteiraIds?: number[];
+  situacaoCliente?: string; situacaoContrato?: string;
+  diasAtrasoMin?: number; diasAtrasoMax?: number;
+  saldoAtualMin?: number; saldoAtualMax?: number;
+  dataHoraAgendamento?: string;
+  ignorarJaIncluidos: boolean; incluirContrato: boolean;
 }
 
 // ── Ocorrencia ────────────────────────────────────────────────────────────────

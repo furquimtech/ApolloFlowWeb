@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 const API_BASE = '/api';
-const APP_CODIGO = 'apollo';
-const APP_CHAVE = '12345';
+const APP_CODIGO = 'apollofront';
+const APP_CHAVE = '85c7e6a7-4d4f-40b8-b7f5-2375db9a3705';
 
 const api = axios.create({
   baseURL: API_BASE,

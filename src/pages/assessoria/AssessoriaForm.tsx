@@ -84,7 +84,7 @@ export default function AssessoriaForm() {
       {loading ? (
         <div className="flex items-center justify-center py-16">
           <svg
-            className="animate-spin h-8 w-8 text-blue-600"
+            className="animate-spin h-8 w-8 text-ftech-600"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
@@ -105,7 +105,7 @@ export default function AssessoriaForm() {
               value={form.nome}
               onChange={handleChange}
               required
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ftech-500 focus:border-transparent"
             />
           </div>
 
@@ -120,7 +120,7 @@ export default function AssessoriaForm() {
               onChange={handleChange}
               required
               placeholder="00.000.000/0001-00"
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ftech-500 focus:border-transparent"
             />
           </div>
 
@@ -132,7 +132,7 @@ export default function AssessoriaForm() {
               name="situacao"
               value={form.situacao}
               onChange={handleChange}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ftech-500 focus:border-transparent bg-white"
             >
               <option value="Ativo">Ativo</option>
               <option value="Inativo">Inativo</option>
@@ -143,7 +143,7 @@ export default function AssessoriaForm() {
             <button
               type="submit"
               disabled={saving}
-              className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-sm font-medium px-5 py-2 rounded-lg transition-colors flex items-center gap-2"
+              className="bg-ftech-600 hover:bg-ftech-700 disabled:opacity-50 text-white text-sm font-medium px-5 py-2 rounded-lg transition-colors flex items-center gap-2"
             >
               {saving && (
                 <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
